@@ -40,7 +40,7 @@ stats_df=pd.DataFrame.from_records(data.statistics.dropna().tolist())
 sum_df = pd.concat([data, stats_df], axis=1)
 
 
-#sum_df.to_csv(r'C:\Users\P078791\DataProfilerPOC\SalesColumnsStats.csv')
+
 
 
 data_stats = report["global_stats"]
