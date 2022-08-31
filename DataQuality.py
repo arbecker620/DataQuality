@@ -1,24 +1,51 @@
 import pandas as pd
+import dataprofiler as dp
+import numpy as np
 
 
-path = r'tablelocation'
-
-target_df = pd.read_csv(path)
-
-
-class DataQuality(pd.DataFrame):
-
-    def __init__(self, df_Dataquality):
-        self.target_df = df_Dataquality
+data = {
+    "calories": [420,380, 390,390, 80, 350],
+    "duration": [50,45,40,40,np.nan ,50]
+}
 
 
-    def perform_DQ_Chk(self):
-        target_df = self.target_df
-        for column in target_df:
-            columnSeriesObj = target_df[column]
-            print('Column Name : ', column)
-            print('Column Unique Contents : ', target_df[column].unique())
-            print('Column Unique Contents Value : ', target_df[column].value_counts())
+target_df = pd.DataFrame(data)
+
+profile = dp.Profiler(target_df)
 
 
-DataQuality(target_df).perform_DQ_Chk
+report = profile.report(report_options={"output_format":"pretty"})
+
+
+data_stats = report["data_stats"]
+
+print(data_stats)
+
+column_list_df = []
+
+ext_data = []
+
+for n in data_stats:
+    column_list = list(n.keys())
+    for col_name in column_list:
+        if col_name not in column_list_df:
+            column_list_df.append(col_name)
+        else:
+            continue
+    ext_data.append(list(n.values()))
+data = pd.DataFrame(ext_data,columns=column_list_df)
+stats_df=pd.DataFrame.from_records(data.statistics.dropna().tolist())
+
+
+sum_df = pd.concat([data, stats_df], axis=1)
+
+
+#sum_df.to_csv(r'C:\Users\P078791\DataProfilerPOC\SalesColumnsStats.csv')
+
+
+data_stats = report["global_stats"]
+
+
+print(data_stats)
+print(sum_df)
+
