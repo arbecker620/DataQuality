@@ -1,0 +1,11 @@
+version: "3"
+services:
+  webservice: 
+    image: dataquality
+    ports:
+      - "8080:80"
+  database:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongodbuser
+      - MONGO_INITDB_ROOT_PASSWORD=ehhh
