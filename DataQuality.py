@@ -2,6 +2,21 @@ import pandas as pd
 import dataprofiler as dp
 import numpy as np
 
+from pymongo import MongoClient
+
+
+
+
+try: 
+    conn = MongoClient()
+except:
+    print("Could not connct to Mongo DB")
+
+
+db = conn.database
+
+collection = db.my_gfg_collection
+
 
 data = {
     "calories": [420,380, 390,390, 80, 350],
@@ -17,9 +32,16 @@ profile = dp.Profiler(target_df)
 report = profile.report(report_options={"output_format":"pretty"})
 
 
+
+
 data_stats = report["data_stats"]
 
-print(data_stats)
+
+
+collection.insert_one(data_stats)
+
+
+
 
 column_list_df = []
 
